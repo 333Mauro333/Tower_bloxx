@@ -29,7 +29,7 @@ public class CubeActions : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor"))
         {
             Freeze();
-            ChangeCubeTag();
+            ChangeTagToFloor();
         }
     }
 
@@ -38,17 +38,17 @@ public class CubeActions : MonoBehaviour
     {
         m.color = color;
     }
-    public void activateGravity()
+    public void Throw()
     {
-        rb.isKinematic = false;
+        rb.isKinematic = true;
     }
-    
+
     void Freeze()
     {
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;
     }
-    void ChangeCubeTag()
+    void ChangeTagToFloor()
     {
         gameObject.tag = "Floor";
     }
