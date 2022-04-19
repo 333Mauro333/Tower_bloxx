@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class CubeActions : MonoBehaviour
 {
+    [SerializeField] Camera camera = null;
+
     Material m = null;
     Rigidbody rb = null;
 
@@ -16,6 +18,19 @@ public class CubeActions : MonoBehaviour
     {
         m = GetComponent<Material>();
         rb = GetComponent<Rigidbody>();
+    }
+    void Start()
+    {
+        camera = FindObjectOfType<Camera>();
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            Freeze();
+            ChangeCubeTag();
+        }
     }
 
 
@@ -26,5 +41,15 @@ public class CubeActions : MonoBehaviour
     public void activateGravity()
     {
         rb.isKinematic = false;
+    }
+    
+    void Freeze()
+    {
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+    }
+    void ChangeCubeTag()
+    {
+        gameObject.tag = "Floor";
     }
 }
