@@ -5,6 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Material))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(HingeJoint))]
 
 public class CubeActions : MonoBehaviour
 {
@@ -12,12 +13,14 @@ public class CubeActions : MonoBehaviour
 
     Material m = null;
     Rigidbody rb = null;
+    HingeJoint hj = null;
 
 
     void Awake()
     {
         m = GetComponent<Material>();
         rb = GetComponent<Rigidbody>();
+        hj = GetComponent<HingeJoint>();
     }
     void Start()
     {
@@ -38,9 +41,14 @@ public class CubeActions : MonoBehaviour
     {
         m.color = color;
     }
+    public void setConnectionBody(Rigidbody craneRb)
+    {
+        hj.connectedBody = craneRb;
+    }
     public void Throw()
     {
-        rb.isKinematic = true;
+        rb.isKinematic = false;
+        hj.connectedBody = null;
     }
 
     void Freeze()
