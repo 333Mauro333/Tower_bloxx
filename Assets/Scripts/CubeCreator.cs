@@ -4,26 +4,23 @@ using UnityEngine;
 
 
 
-public class CubeCreator : MonoBehaviour
+namespace Tower_Bloxx
 {
-    [SerializeField] GameObject cubePrefab = null;
-
-
-    void Awake()
+    public class CubeCreator : MonoBehaviour
     {
+        [SerializeField] GameObject cubePrefab = null;
 
-    }
 
-    void Update()
-    {
+        public GameObject CreateCube(Vector3 position)
+        {
+            Vector3 diff;
 
-    }
+            GameObject currCube = Instantiate(cubePrefab);
+            diff = new Vector3(0.0f, currCube.transform.localScale.y / 2.0f, 0.0f);
 
-    public GameObject CreateCube(Vector3 position)
-    {
-        GameObject currCube = Instantiate(cubePrefab);
-        currCube.transform.position = position;
+            currCube.transform.position = position - diff;
 
-        return currCube;
+            return currCube;
+        }
     }
 }

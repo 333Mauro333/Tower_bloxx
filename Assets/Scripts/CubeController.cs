@@ -4,63 +4,69 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class CubeController : MonoBehaviour
+namespace Tower_Bloxx
 {
-    [SerializeField] CubeCreator cubeCreator = null;
-    [SerializeField] KeyCode createCube = KeyCode.None;
-    [SerializeField] KeyCode throwCube = KeyCode.None;
-    [SerializeField] GameObject crane = null;
-    [SerializeField] Camera camera = null;
-    
-    Vector3 diff = new Vector3(0.0f, 0.75f, 0.0f);
-    GameObject currCube = null;
-    CubeActions ca = null;
-
-
-    void Start()
+    public class CubeController : MonoBehaviour
     {
-        camera = FindObjectOfType<Camera>();
-        CreateCube();
-    }
+        [SerializeField] CubeCreator cubeCreator = null;
+        [SerializeField] KeyCode createCube = KeyCode.None;
+        [SerializeField] KeyCode throwCube = KeyCode.None;
+        [SerializeField] GameObject crane = null;
+        [SerializeField] Camera camera = null;
 
-    void Update()
-    {
-        UserInput();
-    }
+        GameObject currCube = null;
+        CubeActions ca = null;
 
 
-    void UserInput()
-    {
-        if (Input.GetKeyDown(createCube) && currCube == null)
+        void Start()
         {
+            camera = FindObjectOfType<Camera>();
             CreateCube();
+        }
+
+        void Update()
+        {
+            UserInput();
+        }
+
+
+        void UserInput()
+        {
+            if (Input.GetKeyDown(createCube) && currCube == null)
+            {
+                CreateCube();
+            }
+
+            if (Input.GetKeyDown(throwCube) && currCube != null)
+            {
+                ThrowCube();
+            }
+        }
+        void CreateCube()
+        {
+            Vector3 diff = new Vector3(0.0f, crane.transform.localScale.y / 2.0f, 0.0f);
+            currCube = cubeCreator.CreateCube(crane.transform.position - diff);
+
             MoveCamera();
             MoveCrane();
-        }
 
-        if (Input.GetKeyDown(throwCube) && currCube != null)
-        {
-            ThrowCube();
+            ca = currCube.GetComponent<CubeActions>();
+            ca.SetConnectedBody(crane);
+            ca.Push(FORCE_INTENSITY.NORMAL);
         }
-    }
-    void CreateCube()
-    {
-        currCube = cubeCreator.CreateCube(crane.transform.position - diff);
-        ca = currCube.GetComponent<CubeActions>();
-        ca.setConnectionBody(crane.GetComponent<Rigidbody>());
-    }
-    void MoveCamera()
-    {
-        camera.transform.position += new Vector3(0.0f, currCube.transform.localScale.y, 0.0f);
-    }
-    void MoveCrane()
-    {
-        crane.transform.position += new Vector3(0.0f, currCube.transform.localScale.y, 0.0f);
-    }
-    void ThrowCube()
-    {
-        ca.Throw();
-        currCube = null;
-        ca = null;
+        void MoveCamera()
+        {
+            camera.transform.position += new Vector3(0.0f, currCube.transform.localScale.y, 0.0f);
+        }
+        void MoveCrane()
+        {
+            crane.transform.position += new Vector3(0.0f, currCube.transform.localScale.y, 0.0f);
+        }
+        void ThrowCube()
+        {
+            ca.Throw();
+            currCube = null;
+            ca = null;
+        }
     }
 }
